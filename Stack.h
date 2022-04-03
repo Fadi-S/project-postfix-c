@@ -1,12 +1,9 @@
 #include "LinkedList.h"
 
-
 #ifndef LAB_6_STACK_H
 #define LAB_6_STACK_H
 
-typedef struct {
-
-} Stack;
+typedef struct Stack Stack;
 
 Stack *initialize();
 

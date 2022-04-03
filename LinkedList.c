@@ -109,9 +109,7 @@ Node *insertNodeBefore(Node*node, float item) {
 Node *insertNodeAfter(Node *node, float data) {
     Node *nodeAfter = newNode(data);
 
-    insertNodeAfterNode(node, nodeAfter);
-
-    return nodeAfter;
+    return insertNodeAfterNode(node, nodeAfter);
 }
 
 LinkedList *newLinkedList() {

@@ -23,7 +23,7 @@ float peek(Stack* stack)
 
 void push(Stack* stack, float item)
 {
-    Node* node = insertNodeBefore(stack->top, item);
+    insertNodeBefore(stack->top, item);
 }
 
 float pop(Stack* stack)
