@@ -50,15 +50,17 @@ char *infixToPostfix(char *infix) {
     Stack *operators = initialize();
 
     int i;
+    int wasOperator=1;
     for (i = 0; i < strlen(infix); ++i) {
         if(infix[i] == ' ') continue;
 
-        if (isdigit(infix[i]) || infix[i] == '.') {
+        if (isdigit(infix[i]) || infix[i] == '.' || (infix[i] == '-' && isdigit(infix[i+1]) && wasOperator)) {
+            wasOperator = 0;
             char number[15] = "";
             int numberIncr = 0;
-            while (isdigit(infix[i]) || infix[i] == '.') {
+            do {
                 number[numberIncr++] = infix[i++];
-            }
+            } while(isdigit(infix[i]) || infix[i] == '.');
             i--;
             number[numberIncr] = ' ';
 
@@ -81,6 +83,7 @@ char *infixToPostfix(char *infix) {
         int priorityOfCurrent = getPriority(infix[i]);
 
         char peekOp = (char) peek(operators);
+        wasOperator = 1;
         while (!isEmpty(operators) && priorityOfCurrent <= getPriority(peekOp) && peekOp != '(') {
             str_append(postfix, (char) pop(operators));
             str_append(postfix, ' ');
@@ -127,7 +130,7 @@ int main() {
 //        printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
 //    }
 
-    printf("%s", infixToPostfix("5.4+8*97- (5 + 6 )"));
+    printf("%s", infixToPostfix("-5.4 -8*97- (5 + 6 )"));
 
 //    Stack *stack = initialize();
 //    push(stack, 5.6);
