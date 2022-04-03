@@ -101,6 +101,28 @@ char *infixToPostfix(char *infix) {
     return postfix;
 }
 
+void infixtopostfix(char *str){
+    Stack *s=initialize();
+    for (int i = 0; i < strlen(str) ; i++) {
+        if (isdigit(str[i]))
+            printf("%c\t",str[i]);
+       else if (isEmpty(s))
+        push(s,str[i]);
+        else if(str[i]==')')
+        {
+            while (peek(s)!='(')
+                printf("%c", pop(s));
+            pop(s);
+        } else {
+            while (!isEmpty(s) &&  peek(s) != '(' && getPriority(str[i]) <= getPriority(peek(s)))
+              printf("%c", pop(s));
+            push(s,str[i]);
+        }
+   }
+    while (!isEmpty(s))
+        printf("%c", pop(s));
+}
+
 /*
 * evaluatePostfix: Evaluates an expression in postfix notation
 * (Reverse-Polish Notation)
@@ -130,7 +152,9 @@ int main() {
 //        printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
 //    }
 
-    printf("%s", infixToPostfix("-5.4 -8*97- (5 + 6 )"));
+//printf("%s", infixToPostfix("-5.4 -8*97- (5 + 6 )"));
+    char infix[100]="-5.4 -8*97- (5 + 6 )";
+    infixtopostfix(infix);
 
 //    Stack *stack = initialize();
 //    push(stack, 5.6);
@@ -148,6 +172,6 @@ int main() {
 //        printf("%f\t", peek(stack));
 //        printf("%f\t\n", pop(stack));
 //    }
-
-    return 0;
+//
+//    return 0;
 }
