@@ -46,7 +46,7 @@ void str_append(char*str, char c)
 }
 
 char *infixToPostfix(char *infix) {
-    char *postfix = malloc(sizeof (infix));
+    char postfix[100] ;
     Stack *operators = initialize();
 
     int i;
@@ -101,26 +101,31 @@ char *infixToPostfix(char *infix) {
     return postfix;
 }
 
-void infixtopostfix(char *str){
+char * infixtopostfix(char *str){
     Stack *s=initialize();
-    for (int i = 0; i < strlen(str) ; i++) {
+    char *post= malloc(strlen(str)+1);
+    int i ;
+    for (i=0; i < strlen(str) ; i++) {
         if (isdigit(str[i]))
-            printf("%c\t",str[i]);
+            post[i]=str[i];
        else if (isEmpty(s))
         push(s,str[i]);
         else if(str[i]==')')
         {
             while (peek(s)!='(')
-                printf("%c", pop(s));
+                post[i]= pop(s);
             pop(s);
-        } else {
+        }
+        else {
             while (!isEmpty(s) &&  peek(s) != '(' && getPriority(str[i]) <= getPriority(peek(s)))
-              printf("%c", pop(s));
+                post[i]=pop(s);
             push(s,str[i]);
         }
    }
     while (!isEmpty(s))
-        printf("%c", pop(s));
+        post[i]= pop(s);
+    return post;
+
 }
 
 /*
@@ -152,9 +157,9 @@ int main() {
 //        printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
 //    }
 
-//printf("%s", infixToPostfix("-5.4 -8*97- (5 + 6 )"));
-    char infix[100]="-5.4 -8*97- (5 + 6 )";
-    infixtopostfix(infix);
+printf("%s", infixToPostfix("-5.4 -8*97- (5 + 6 )"));
+//    char infix[100]="-5.4 -8*97- (5 + 6 )";
+//    printf("%s",infixtopostfix(infix));
 
 //    Stack *stack = initialize();
 //    push(stack, 5.6);
