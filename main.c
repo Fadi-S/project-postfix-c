@@ -46,7 +46,7 @@ void str_append(char*str, char c)
 }
 
 char *infixToPostfix(char *infix) {
-    char postfix[100] ;
+    char *postfix = malloc(strlen(infix) * 2);
     Stack *operators = initialize();
 
     int i;

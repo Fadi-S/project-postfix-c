@@ -9,7 +9,7 @@ Stack *initialize();
 
 void push(Stack* stack, float item);
 float peek(Stack* stack);
-char * pop(Stack* stack);
+float pop(Stack* stack);
 void destroy(Stack *stack);
 int isEmpty(Stack *stack);
 
