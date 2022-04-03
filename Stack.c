@@ -1,36 +1,36 @@
 #include <stdlib.h>
 #include "LinkedList.h"
-#include <stdio.h>
 
 typedef struct {
-    Node * top;
+    LinkedList *list;
 } Stack;
 
 Stack *initialize()
 {
     Stack *stack = malloc(sizeof(Stack));
 
-    stack->top = newNode(-1);
+    stack->list = newLinkedList();
 
     return stack;
 }
 
-
 float peek(Stack* stack)
 {
-    return getData(getPrevious(stack->top));
+    return getData(getHead(stack->list));
 }
 
 void push(Stack* stack, float item)
 {
-    insertNodeBefore(stack->top, item);
+    Node *node = newNode(item);
+
+    setHead(stack->list, node);
 }
 
 float pop(Stack* stack)
 {
     float item = peek(stack);
 
-    stack->top->previous = deleteNode(getPrevious(stack->top));
+    deleteHead(stack->list);
 
     return item;
 }
@@ -42,5 +42,61 @@ void destroy(Stack *stack)
 
 int isEmpty(Stack *stack)
 {
-    return getPrevious(stack->top) == NULL;
+    return isLinkedListEmpty(stack->list);
 }
+
+
+//typedef struct {
+//    int top;
+//    float *items;
+//    int full;
+//} Stack;
+//
+//Stack *initialize()
+//{
+//    Stack *stack = malloc(sizeof(Stack));
+//    stack->items = malloc(100 * sizeof(float ));
+//
+//    stack->full = 100;
+//
+//    stack->top = 0;
+//
+//    return stack;
+//}
+//
+//int maxElements(Stack *stack)
+//{
+//    return stack->full;
+//}
+//
+//void push(Stack* stack, float item)
+//{
+//    stack->items[stack->top] = item;
+//
+//    stack->top++;
+//}
+//
+//float peek(Stack* stack)
+//{
+//    return stack->items[stack->top-1];
+//}
+//
+//float pop(Stack* stack)
+//{
+//    float item = peek(stack);
+//
+//    stack->top--;
+//
+//    return item;
+//}
+//
+//void destroy(Stack *stack)
+//{
+//    free(stack->items);
+//    free(stack);
+//}
+//
+//int isEmpty(Stack *stack)
+//{
+//    return stack->top == 0;
+//}

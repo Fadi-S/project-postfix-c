@@ -44,11 +44,12 @@ Node *getHead(LinkedList *list);
 
 Node *getTail(LinkedList *list);
 
-float isLinkedListEmpty(LinkedList *list);
+int isLinkedListEmpty(LinkedList *list);
 
 Node *searchLinkedList(LinkedList *list, float value);
 
 void deleteTail(LinkedList *list);
+void deleteHead(LinkedList *list);
 
 void displayLinkedList(LinkedList *list);
 

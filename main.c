@@ -78,16 +78,13 @@ char *infixToPostfix(char *infix) {
             continue;
         }
 
-        if(infix[i] == '(') {
-            push(operators, infix[i]);
-            continue;
-        }
-
         int priorityOfCurrent = getPriority(infix[i]);
 
-        while (priorityOfCurrent <= getPriority((char) peek(operators))) {
+        char peekOp = (char) peek(operators);
+        while (!isEmpty(operators) && priorityOfCurrent <= getPriority(peekOp) && peekOp != '(') {
             str_append(postfix, (char) pop(operators));
             str_append(postfix, ' ');
+            peekOp = (char) peek(operators);
         }
 
         push(operators, infix[i]);
@@ -130,7 +127,24 @@ int main() {
 //        printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
 //    }
 
-    printf("%s", infixToPostfix("5.4 + 8 * 97 - ( 5 + 6 )"));
+    printf("%s", infixToPostfix("5.4+8*97- (5 + 6 )"));
+
+//    Stack *stack = initialize();
+//    push(stack, 5.6);
+//    push(stack, 3);
+//    pop(stack);
+//    push(stack, 770);
+//    push(stack, 100);
+//
+//    pop(stack);
+//
+//    push(stack, 6);
+//
+//    while (!isEmpty(stack))
+//    {
+//        printf("%f\t", peek(stack));
+//        printf("%f\t\n", pop(stack));
+//    }
 
     return 0;
 }

@@ -34,18 +34,24 @@ Node *getPrevious(Node *node) {
     return node ? node->previous : node;
 }
 
-void deleteNodeAfter(Node *node) {
+Node* deleteNodeAfter(Node *node) {
     if (!node)
-        return;
+        return node;
 
-    Node *next = getNext(node);
-    if (!next)
-        return;
+    Node *next = node->next;
+    if (!next) {
+        node->next = NULL;
 
-    node->next = getNext(next);
-    node->next->previous = next->previous;
+        return node;
+    }
+
+    node->next=next->next;
+    if (next->next)
+        next->next->previous = node;
 
     free(next);
+
+    return node;
 }
 
 Node* deleteNode(Node *node) {
@@ -79,6 +85,9 @@ Node *searchNode(Node *node, float data) {
 }
 
 Node *insertNodeAfterNode(Node *node, Node *nodeAfter) {
+    if(!node)
+        return NULL;
+
     nodeAfter->next = node->next;
     nodeAfter->previous = node;
 
@@ -112,12 +121,14 @@ Node *insertNodeAfter(Node *node, float data) {
     return insertNodeAfterNode(node, nodeAfter);
 }
 
+
+/********** Linked List **************/
+
 LinkedList *newLinkedList() {
     LinkedList *list = malloc(sizeof(LinkedList));
 
     list->head = newNode(-1); // sentinel
-    list->head->next = NULL;
-    list->tail = NULL;
+    list->tail = insertNodeAfter(list->head, -1); // tail sentinel
 
     return list;
 }
@@ -127,24 +138,10 @@ Node *getHead(LinkedList *list) {
 }
 
 void setTail(LinkedList *list, Node *node) {
-    if (list->tail) {
-        list->tail = insertNodeAfterNode(list->tail, node);
-
-        return;
-    }
-
-
-    list->tail = insertNodeAfterNode(getHead(list), node);
+    insertNodeAfterNode(list->tail->previous, node);
 }
 
 void setHead(LinkedList *list, Node *node) {
-    if (list->tail == NULL) {
-        list->tail = node;
-
-        list->tail->next = NULL;
-        list->tail->previous = list->head;
-    }
-
     insertNodeAfterNode(list->head, node);
 }
 
@@ -157,7 +154,13 @@ Node *getTail(LinkedList *list) {
 }
 
 void deleteTail(LinkedList *list) {
-    deleteNode(getTail(list));
+    if (list->head->next != list->tail)
+        deleteNodeAfter(list->tail->previous->previous);
+}
+
+void deleteHead(LinkedList *list) {
+    if (list->head->next != list->tail)
+        deleteNodeAfter(list->head);
 }
 
 Node *searchLinkedList(LinkedList *list, float value) {
@@ -165,7 +168,7 @@ Node *searchLinkedList(LinkedList *list, float value) {
 }
 
 int isLinkedListEmpty(LinkedList *list) {
-    return !getHead(list);
+    return list->head->next == list->tail;
 }
 
 void displayLinkedList(LinkedList *list) {
