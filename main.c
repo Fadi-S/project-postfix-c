@@ -45,6 +45,29 @@ void str_append(char*str, char c)
     str[strlen(str)] = c;
 }
 
+float calculate(float operand1, float operand2, char operator)
+{
+    if(operator == '+') {
+        return operand1 + operand2;
+    }
+
+    if(operator == '-') {
+        return operand1 - operand2;
+    }
+
+    if(operator == '*') {
+        return operand1 * operand2;
+    }
+
+    if(operator == '/') {
+        return operand1 / operand2;
+    }
+
+    if(operator == '^') {
+        return pow(operand1, operand2);
+    }
+}
+
 char *infixToPostfix(char *infix) {
     char *postfix = malloc(strlen(infix) * 2);
     Stack *operators = initialize();
@@ -132,8 +155,11 @@ char * infixtopostfix(char *str){
 * evaluatePostfix: Evaluates an expression in postfix notation
 * (Reverse-Polish Notation)
 */
-float evaluatePostfix(char *postfix) {
-    /* TODO: ADD YOUR CODE HERE */
+float evaluatePostfix(char *postfix)
+{
+
+
+    return 9;
 }
 
 
@@ -144,39 +170,22 @@ void replaceNewLineBySpace(char *s) {
 }
 
 int main() {
-//    char infixExpr[256] = "";
-//
-//    printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
-//    while(fgets(infixExpr, 255, stdin) != NULL)
-//    {
-//        replaceNewLineBySpace(infixExpr);
-//        char*postfix = infixToPostfix(infixExpr);
-//        printf("Postfix : %s\n", postfix);
-//        float result = evaluatePostfix(postfix);
-//        printf("Result: %f\n\n", result);
-//        printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
-//    }
+    char infixExpr[256] = "";
 
-printf("%s", infixToPostfix("-5.4 -8*97- (5 + 6 )"));
+    printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
+    while(fgets(infixExpr, 255, stdin) != NULL)
+    {
+        replaceNewLineBySpace(infixExpr);
+        char*postfix = infixToPostfix(infixExpr);
+        printf("Postfix : %s\n", postfix);
+        float result = evaluatePostfix(postfix);
+        printf("Result: %f\n\n", result);
+        printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
+    }
+
+//printf("%s", infixToPostfix("2 + ( -2.5 + 3.14 ) * ( -5.4 + 8.1 ) ^ ( -0.5 )"));
 //    char infix[100]="-5.4 -8*97- (5 + 6 )";
 //    printf("%s",infixtopostfix(infix));
 
-//    Stack *stack = initialize();
-//    push(stack, 5.6);
-//    push(stack, 3);
-//    pop(stack);
-//    push(stack, 770);
-//    push(stack, 100);
-//
-//    pop(stack);
-//
-//    push(stack, 6);
-//
-//    while (!isEmpty(stack))
-//    {
-//        printf("%f\t", peek(stack));
-//        printf("%f\t\n", pop(stack));
-//    }
-//
-//    return 0;
+    return 0;
 }
