@@ -199,9 +199,5 @@ int main() {
         printf(message);
     }
 
-//printf("%s", infixToPostfix("2 + ( -2.5 + 3.14 ) * ( -5.4 + 8.1 ) ^ ( -0.5 )"));
-//    char infix[100]="-5.4 -8*97- (5 + 6 )";
-//    printf("%s",infixtopostfix(infix));
-
     return 0;
 }
