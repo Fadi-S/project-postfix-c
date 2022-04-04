@@ -100,6 +100,19 @@ char *infixToPostfix(char *infix) {
 
     return postfix;
 }
+float calculate(float x,float y,char operand)
+{
+    if(operand=='+')
+        return x+y;
+    if(operand=='-')
+        return x-y;
+    if(operand=='*')
+        return x*y;
+    if(operand=='/')
+        return x/y;
+    if(operand=='^')
+        return pow(x,y);
+}
 
 char * infixtopostfix(char *str){
     Stack *s=initialize();
@@ -128,15 +141,22 @@ char * infixtopostfix(char *str){
 
 }
 
-/*
-* evaluatePostfix: Evaluates an expression in postfix notation
-* (Reverse-Polish Notation)
-*/
+
 float evaluatePostfix(char *postfix) {
-    /* TODO: ADD YOUR CODE HERE */
+    Stack *s=initialize();
+    int value=0.0;
+    for (int i = 0; i < strlen(postfix) ; ++i) {
+        if (isFloat(postfix[i]))
+            push(s,postfix[i]-0);
+        else
+        {
+            float x= pop(s);
+            float y= pop(s);
+            value+= calculate(x,y,postfix[i]);
+        }
+    }
+    return value;
 }
-
-
 void replaceNewLineBySpace(char *s) {
     char *s1 = s;
     while ((s1 = strstr(s1, "\n")) != NULL)
@@ -144,20 +164,21 @@ void replaceNewLineBySpace(char *s) {
 }
 
 int main() {
-//    char infixExpr[256] = "";
-//
-//    printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
-//    while(fgets(infixExpr, 255, stdin) != NULL)
-//    {
-//        replaceNewLineBySpace(infixExpr);
-//        char*postfix = infixToPostfix(infixExpr);
-//        printf("Postfix : %s\n", postfix);
-//        float result = evaluatePostfix(postfix);
-//        printf("Result: %f\n\n", result);
-//        printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
-//    }
+    char infixExpr[256] = "";
 
-printf("%s", infixToPostfix("-5.4 -8*97- (5 + 6 )"));
+    printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
+    while(fgets(infixExpr, 255, stdin) != NULL)
+    {
+        replaceNewLineBySpace(infixExpr);
+        char*postfix = infixToPostfix(infixExpr);
+        printf("Postfix : %s\n", postfix);
+        float result = evaluatePostfix(postfix);
+        printf("Result: %f\n\n", result);
+        printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
+    }
+
+
+//printf("%s", infixToPostfix("-5.4 -8*97- (5 + 6 )"));
 //    char infix[100]="-5.4 -8*97- (5 + 6 )";
 //    printf("%s",infixtopostfix(infix));
 
