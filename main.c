@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-// Check if expression is a float
 int isFloat(char *number) {
     char *temp;
 
@@ -21,7 +20,6 @@ int isFloat(char *number) {
     return 1;
 }
 
-// Calculate operator priority
 int getPriority(char operator) {
     if (operator == '(' || operator == ')') {
         return 4;
@@ -42,34 +40,9 @@ int getPriority(char operator) {
     return 0;
 }
 
-// Add character to the end of a string
-void str_append(char *str, char c) {
+void str_append(char*str, char c)
+{
     str[strlen(str)] = c;
-}
-
-// Pass operands and operator -> Calculate the result
-float calculate(float operand1, float operand2, char operator) {
-    if (operator == '+') {
-        return operand1 + operand2;
-    }
-
-    if (operator == '-') {
-        return operand1 - operand2;
-    }
-
-    if (operator == '*') {
-        return operand1 * operand2;
-    }
-
-    if (operator == '/') {
-        return operand1 / operand2;
-    }
-
-    if (operator == '^') {
-        return powf(operand1, operand2);
-    }
-
-    return 0;
 }
 
 char *infixToPostfix(char *infix) {
@@ -77,31 +50,28 @@ char *infixToPostfix(char *infix) {
     Stack *operators = initialize();
 
     int i;
-    int wasOperator = 1;
-    for (i = 0; i < strlen(infix); ++i) { // Loop through all characters of infix expression
-        if (infix[i] == ' ') continue; // In case of whitespace -> Skip
+    int wasOperator=1;
+    for (i = 0; i < strlen(infix); ++i) {
+        if(infix[i] == ' ') continue;
 
-        // In case of number -> Get all number and out it in expression
-        // Starts with a digit, dot or minus sign
-        // EX: -4.5 , 55 , -7, 12.3
-        if (isdigit(infix[i]) || infix[i] == '.' || (infix[i] == '-' && isdigit(infix[i + 1]) && wasOperator)) {
-            wasOperator = 0; // Indicate that the last loop was a number not an operator
+        if (isdigit(infix[i]) || infix[i] == '.' || (infix[i] == '-' && isdigit(infix[i+1]) && wasOperator)) {
+            wasOperator = 0;
+            char number[15] = "";
+            int numberIncr = 0;
             do {
-                str_append(postfix, infix[i++]);
-            } while (isdigit(infix[i]) || infix[i] == '.');
-
-            str_append(postfix, ' ');
-
+                number[numberIncr++] = infix[i++];
+            } while(isdigit(infix[i]) || infix[i] == '.');
             i--;
+            number[numberIncr] = ' ';
+
+            strcat(postfix, number);
             continue;
         }
 
-        // In case of a closed bracket -> Loop until you find an open bracket (
-        if (infix[i] == ')') {
-            // Loop until you find an open bracket (
-            while (!isEmpty(operators)) {
+        if(infix[i] == ')') {
+            while(!isEmpty(operators)) {
                 char opr = (char) pop(operators);
-                if (opr == '(') break;
+                if(opr == '(') break;
 
                 str_append(postfix, opr);
                 str_append(postfix, ' ');
@@ -110,18 +80,11 @@ char *infixToPostfix(char *infix) {
             continue;
         }
 
-        // In Case of an operator +-*/^ or (
-        wasOperator = 1; // Indicate that the last loop was an operator not a number
-
         int priorityOfCurrent = getPriority(infix[i]);
+
         char peekOp = (char) peek(operators);
-        // Pop and add to expression while priority of current operator
-        // is bigger than that of the operator on top
-        while (
-                !isEmpty(operators)
-                && priorityOfCurrent <= getPriority(peekOp)
-                && peekOp != '(')
-        {
+        wasOperator = 1;
+        while (!isEmpty(operators) && priorityOfCurrent <= getPriority(peekOp) && peekOp != '(') {
             str_append(postfix, (char) pop(operators));
             str_append(postfix, ' ');
             peekOp = (char) peek(operators);
@@ -130,7 +93,6 @@ char *infixToPostfix(char *infix) {
         push(operators, infix[i]);
     }
 
-    // Dump all operators still in stack in the expression
     while (!isEmpty(operators)) {
         str_append(postfix, (char) pop(operators));
         str_append(postfix, ' ');
@@ -139,27 +101,29 @@ char *infixToPostfix(char *infix) {
     return postfix;
 }
 
-char *infixtopostfix(char *str) {
-    Stack *s = initialize();
-    char *post = malloc(strlen(str) + 1);
-    int i;
-    for (i = 0; i < strlen(str); i++) {
+char * infixtopostfix(char *str){
+    Stack *s=initialize();
+    char *post= malloc(strlen(str)+1);
+    int i ;
+    for (i=0; i < strlen(str) ; i++) {
         if (isdigit(str[i]))
-            post[i] = str[i];
-        else if (isEmpty(s))
-            push(s, str[i]);
-        else if (str[i] == ')') {
-            while (peek(s) != '(')
-                post[i] = (char) pop(s);
+            post[i]=str[i];
+       else if (isEmpty(s))
+        push(s,str[i]);
+        else if(str[i]==')')
+        {
+            while (peek(s)!='(')
+                post[i]= pop(s);
             pop(s);
-        } else {
-            while (!isEmpty(s) && peek(s) != '(' && getPriority(str[i]) <= getPriority((char) peek(s)))
-                post[i] = (char) pop(s);
-            push(s, str[i]);
         }
-    }
+        else {
+            while (!isEmpty(s) &&  peek(s) != '(' && getPriority(str[i]) <= getPriority(peek(s)))
+                post[i]=pop(s);
+            push(s,str[i]);
+        }
+   }
     while (!isEmpty(s))
-        post[i] = pop(s);
+        post[i]= pop(s);
     return post;
 
 }
@@ -169,42 +133,50 @@ char *infixtopostfix(char *str) {
 * (Reverse-Polish Notation)
 */
 float evaluatePostfix(char *postfix) {
-
-
-    return 9;
+    /* TODO: ADD YOUR CODE HERE */
 }
 
 
-void replaceNewLineBySpace(char *string)
-{
-    while ((string = strstr(string, "\n")) != NULL)
-    {
-        *string = ' ';
-    }
+void replaceNewLineBySpace(char *s) {
+    char *s1 = s;
+    while ((s1 = strstr(s1, "\n")) != NULL)
+        *s1 = ' ';
 }
 
 int main() {
-    char infixExpr[256] = "";
-    char *message = "Enter an expression you want to evaluate or type 'q' to exit: ";
+//    char infixExpr[256] = "";
+//
+//    printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
+//    while(fgets(infixExpr, 255, stdin) != NULL)
+//    {
+//        replaceNewLineBySpace(infixExpr);
+//        char*postfix = infixToPostfix(infixExpr);
+//        printf("Postfix : %s\n", postfix);
+//        float result = evaluatePostfix(postfix);
+//        printf("Result: %f\n\n", result);
+//        printf("Enter an expression you want to evaluate or Ctrl+Z to exit: ");
+//    }
 
-    printf(message);
-    while (fgets(infixExpr, 255, stdin) != NULL) {
-        replaceNewLineBySpace(infixExpr);
-
-        if (strcasecmp(infixExpr, "q ") == 0) {
-            exit(0);
-        }
-
-        char *postfix = infixToPostfix(infixExpr);
-        printf("Postfix : %s\n", postfix);
-        float result = evaluatePostfix(postfix);
-        printf("Result: %f\n\n", result);
-        printf(message);
-    }
-
-//printf("%s", infixToPostfix("2 + ( -2.5 + 3.14 ) * ( -5.4 + 8.1 ) ^ ( -0.5 )"));
+printf("%s", infixToPostfix("-5.4 -8*97- (5 + 6 )"));
 //    char infix[100]="-5.4 -8*97- (5 + 6 )";
 //    printf("%s",infixtopostfix(infix));
 
-    return 0;
+//    Stack *stack = initialize();
+//    push(stack, 5.6);
+//    push(stack, 3);
+//    pop(stack);
+//    push(stack, 770);
+//    push(stack, 100);
+//
+//    pop(stack);
+//
+//    push(stack, 6);
+//
+//    while (!isEmpty(stack))
+//    {
+//        printf("%f\t", peek(stack));
+//        printf("%f\t\n", pop(stack));
+//    }
+//
+//    return 0;
 }
