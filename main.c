@@ -82,8 +82,10 @@ float calculate(float operand1, float operand2, char operator) {
 }
 
 char *infixToPostfix(char *infix) {
-    char postfixTemp[strlen(infix)*3];
-    strcpy(postfixTemp, "");
+    char *postfix = malloc(sizeof(infix) * 2);
+
+//    char postfix[strlen(infix)*3];
+    strcpy(postfix, "");
     Stack *operators = initialize();
 
     int i;
@@ -97,10 +99,10 @@ char *infixToPostfix(char *infix) {
         if (isdigit(infix[i]) || infix[i] == '.' || (infix[i] == '-' && isdigit(infix[i + 1]) && wasOperator)) {
             wasOperator = 0; // Indicate that the last loop was a number not an operator
             do {
-                str_append(postfixTemp, infix[i++]);
+                str_append(postfix, infix[i++]);
             } while (isdigit(infix[i]) || infix[i] == '.');
 
-            str_append(postfixTemp, ' ');
+            str_append(postfix, ' ');
 
             i--;
             continue;
@@ -113,8 +115,8 @@ char *infixToPostfix(char *infix) {
                 char opr =  (char) pop(operators);
                 if (opr == '(') break;
 
-                str_append(postfixTemp, opr);
-                str_append(postfixTemp, ' ');
+                str_append(postfix, opr);
+                str_append(postfix, ' ');
             }
 
             continue;
@@ -133,8 +135,8 @@ char *infixToPostfix(char *infix) {
                 && priorityOfCurrent <= getPriority(peekOp)
                 && peekOp != '(')
         {
-            str_append(postfixTemp, (char) pop(operators));
-            str_append(postfixTemp, ' ');
+            str_append(postfix, (char) pop(operators));
+            str_append(postfix, ' ');
             peekOp = (char) peek(operators);
         }
 
@@ -143,13 +145,12 @@ char *infixToPostfix(char *infix) {
 
     // Dump all operators still in stack in the expression
     while (!isEmpty(operators)) {
-        str_append(postfixTemp, (char) pop(operators));
-        str_append(postfixTemp, ' ');
+        str_append(postfix, (char) pop(operators));
+        str_append(postfix, ' ');
     }
 
-    char *postfix = malloc(sizeof(infix) * 2);
 
-    strcpy(postfix, postfixTemp);
+//    strcpy(postfix, postfix);
     return postfix;
 }
 
