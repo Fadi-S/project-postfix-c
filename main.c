@@ -46,7 +46,11 @@ int getPriority(char operator) {
 
 // Add character to the end of a string
 void str_append(char *str, char c) {
-    str[strlen(str)] = c;
+    char newStr[2];
+    newStr[0] = c;
+    newStr[1] = '\0';
+
+    strcat(str, newStr);
 }
 
 // Pass operands and operator -> Calculate the result
@@ -77,9 +81,9 @@ float calculate(float operand1, float operand2, char operator) {
     return 0;
 }
 
-char *infixToPostfix(char infix[]) {
-    char *postfix = malloc(strlen(infix)*2);
-    char postfixTemp[strlen(infix)*2];
+char *infixToPostfix(char *infix) {
+    char postfixTemp[strlen(infix)*3];
+    strcpy(postfixTemp, "");
     Stack *operators = initialize();
 
     int i;
@@ -143,6 +147,7 @@ char *infixToPostfix(char infix[]) {
         str_append(postfixTemp, ' ');
     }
 
+    char *postfix = malloc(sizeof(infix) * 2);
 
     strcpy(postfix, postfixTemp);
     return postfix;
