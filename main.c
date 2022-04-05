@@ -77,8 +77,9 @@ float calculate(float operand1, float operand2, char operator) {
     return 0;
 }
 
-char *infixToPostfix(char *infix) {
-    char *postfix = malloc(strlen(infix) * 2);
+char *infixToPostfix(char infix[]) {
+    char *postfix = malloc(strlen(infix)*2);
+    char postfixTemp[strlen(infix)*2];
     Stack *operators = initialize();
 
     int i;
@@ -92,10 +93,10 @@ char *infixToPostfix(char *infix) {
         if (isdigit(infix[i]) || infix[i] == '.' || (infix[i] == '-' && isdigit(infix[i + 1]) && wasOperator)) {
             wasOperator = 0; // Indicate that the last loop was a number not an operator
             do {
-                str_append(postfix, infix[i++]);
+                str_append(postfixTemp, infix[i++]);
             } while (isdigit(infix[i]) || infix[i] == '.');
 
-            str_append(postfix, ' ');
+            str_append(postfixTemp, ' ');
 
             i--;
             continue;
@@ -105,11 +106,11 @@ char *infixToPostfix(char *infix) {
         if (infix[i] == ')') {
             // Loop until you find an open bracket (
             while (!isEmpty(operators)) {
-                char opr = (char) pop(operators);
+                char opr =  (char) pop(operators);
                 if (opr == '(') break;
 
-                str_append(postfix, opr);
-                str_append(postfix, ' ');
+                str_append(postfixTemp, opr);
+                str_append(postfixTemp, ' ');
             }
 
             continue;
@@ -121,14 +122,15 @@ char *infixToPostfix(char *infix) {
         int priorityOfCurrent = getPriority(infix[i]);
         char peekOp = (char) peek(operators);
         // Pop and add to expression while priority of current operator
-        // is bigger than that of the operator on top
+        // is bigger than that of the operator on
+        // top
         while (
                 !isEmpty(operators)
                 && priorityOfCurrent <= getPriority(peekOp)
                 && peekOp != '(')
         {
-            str_append(postfix, (char) pop(operators));
-            str_append(postfix, ' ');
+            str_append(postfixTemp, (char) pop(operators));
+            str_append(postfixTemp, ' ');
             peekOp = (char) peek(operators);
         }
 
@@ -137,10 +139,12 @@ char *infixToPostfix(char *infix) {
 
     // Dump all operators still in stack in the expression
     while (!isEmpty(operators)) {
-        str_append(postfix, (char) pop(operators));
-        str_append(postfix, ' ');
+        str_append(postfixTemp, (char) pop(operators));
+        str_append(postfixTemp, ' ');
     }
 
+
+    strcpy(postfix, postfixTemp);
     return postfix;
 }
 
@@ -160,7 +164,6 @@ float evaluatePostfix(char *postfix) {
         float y = pop(s);
         float result = calculate(y, x, operand[0]);
         push(s, result);
-
         operand = strtok(NULL, " ");
     }
 
@@ -197,11 +200,14 @@ int main() {
         float result = evaluatePostfix(postfix);
         printf("Result: %f\n\n", result);
         printf(message);
+
+        free(postfix);
     }
 
-//printf("%s", infixToPostfix("2 + ( -2.5 + 3.14 ) * ( -5.4 + 8.1 ) ^ ( -0.5 )"));
+//    printf("%s",infixToPostfix("2 + ( -2.5 + 3.14 ) * ( -5.4 + 8.1 ) ^ ( -0.5 )"));
 //    char infix[100]="-5.4 -8*97- (5 + 6 )";
 //    printf("%s",infixtopostfix(infix));
-
+//   char example[100]="5 4 3 * 2 / + 7 -";
+//    printf("%.2f", evaluatePostfix(example));
     return 0;
 }
