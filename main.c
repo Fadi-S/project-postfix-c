@@ -204,10 +204,5 @@ int main() {
         free(postfix);
     }
 
-//    printf("%s",infixToPostfix("2 + ( -2.5 + 3.14 ) * ( -5.4 + 8.1 ) ^ ( -0.5 )"));
-//    char infix[100]="-5.4 -8*97- (5 + 6 )";
-//    printf("%s",infixtopostfix(infix));
-//   char example[100]="5 4 3 * 2 / + 7 -";
-//    printf("%.2f", evaluatePostfix(example));
     return 0;
 }
