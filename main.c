@@ -82,7 +82,7 @@ float calculate(float operand1, float operand2, char operator) {
 }
 
 char *infixToPostfix(char *infix) {
-    char *postfix = malloc(sizeof(infix) * 2);
+    char *postfix = malloc(strlen(infix) * 2);
 
 //    char postfix[strlen(infix)*3];
     strcpy(postfix, "");
