@@ -201,7 +201,6 @@ int main() {
         float result = evaluatePostfix(postfix);
         printf("Result: %f\n\n", result);
         printf(message);
-    }
 
         free(postfix);
     }
