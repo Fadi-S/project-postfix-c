@@ -77,6 +77,13 @@ float calculate(float operand1, float operand2, char operator) {
     if (operator == '^') {
         return powf(operand1, operand2);
     }
+    if(operator=='%')
+    {
+//        if(operand1)
+//        return operand1 - ( operand2 * trunc( operand2/operand1 ) );
+
+        return fmod(operand1,operand2);
+    }
 
     return 0;
 }
@@ -199,7 +206,7 @@ int main() {
         replaceNewLineBySpace(infixExpr);
 
         if (strcasecmp(infixExpr, "q ") == 0) {
-            exit(0);
+            exit(-1);
         }
 
         char *postfix = infixToPostfix(infixExpr);
@@ -208,7 +215,7 @@ int main() {
         printf("Result: %f\n\n", result);
         printf(message);
 
-        free(postfix);
+       // free(postfix);
     }
 
     return 0;
