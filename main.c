@@ -1,9 +1,9 @@
 #include <stdio.h>
-#include "Stack.h"
-#include "string.h"
-#include <math.h>
 #include <stdlib.h>
+#include <string.h>
+#include <math.h>
 #include <ctype.h>
+#include "Stack.h"
 
 #define VERBOSE 0
 

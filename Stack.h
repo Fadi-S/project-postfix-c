@@ -1,5 +1,3 @@
-#include "LinkedList.h"
-
 #ifndef LAB_6_STACK_H
 #define LAB_6_STACK_H
 
